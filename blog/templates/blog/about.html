@@ -1,0 +1,33 @@
+{% extends "blog/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+    <h1 class="my-4">About Page</h1>
+    <div class="container">
+    <p class="lead lh-lg">The scope of the project specifies the objectives of the project and the goals that
+        need to be met to achieve the satisfactory result. This platform will allows user’s create their blog .User can post their
+        suggestions and feedback for the organization. If someone is not able to express
+        his/her view in front of people those also share the things through this blogging
+        system. The Online Blogging System will allow the users to publish the Blog post if
+        he/she should have credentials to login. This application would take user’s data and it
+        will store the data in database safely and securely. No other person can viewed the
+        other person detail. This project is completely built on administrative level so only
+        admin is granted the access. It will also reduce the manual work for managing blogs.
+        Only logged in user can CREATE,UPDATE and DELETE their own blog.
+        This application will also reduce the error when entering the invalid data. It will
+        also provide error message when entered invalid data. No formal knowledge is needed
+        for user to use this application. Thus by all it proves it is user-friendly.
+
+    </p>
+    </div>
+<br><br>
+
+     <div class= "container content-section col-lg-6 col-sm-12 w-60" style="border-radius:0;">
+        <h3 class="text-primary my-4 text-center">Contact Us</h3>
+        <form method="POST">
+            {% csrf_token %}
+            {{ form|crispy}}
+            <button class="btn btn-primary my-4" type="submit">Send</button>
+        </form>
+    </div>
+
+{% endblock content %}

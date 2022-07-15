@@ -1,0 +1,56 @@
+{% extends "blog/base.html" %}
+{% block content %}
+
+{% for post in posts %}
+<div class="container my-4 content-section mx-auto col-sm-8 w-auto">
+  <div class="mx-2">
+    <span class="mx-2"><img class="rounded-circle article-img" src="{{ post.author.profile.image.url }}"></span>
+    <span><a class="mr-2 text-decoration-none article-title user-name"  href="{% url 'user-posts' post.author.username %}">{{ post.author }}</a></span>
+    <span><small class="text-muted">{{ post.date_posted|date:"F d, Y" }}</small></span>
+      <br>
+
+    <hr>
+
+
+  </div>
+  <div class="container">
+    <h3><a class=" text-decoration-none article-title"
+        href="{% url 'blog-detail' post.pk %}">{{ post.title}}</a></h3>
+    <p style="color:black;">{{ post.content| safe|truncatechars:400 }}</p>
+    <a href="{% url 'blog-detail' post.pk %}">
+        <button class="btn btn-dark btn-outline-secondary text-light">
+             Continue Reading
+        </button>
+    </a>
+    
+  </div>
+</div>
+
+{% endfor %}
+{% if is_paginated %}
+
+{% comment %}
+      {% if page_obj.has_previous %}
+        <a class="btn btn-outline-primary mb-4" href="?page=1">First</a>
+        <a class="btn btn-outline-primary mb-4" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+      {% endif %}
+{% endcomment%}
+
+      {% for num in page_obj.paginator.page_range %}
+        {% if page_obj.number == num %}
+          <a class="btn btn-dark mb-4" href="?page={{ num }}">{{ num }}</a>
+        {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+          <a class="btn btn-outline-dark  mb-4" href="?page={{ num }}">{{ num }}</a>
+        {% endif %}
+      {% endfor %}
+
+{% comment %}
+      {% if page_obj.has_next %}
+      <a class="btn btn-outline-primary mb-4" href="?page={{ page_obj.next_page_number }}">Next</a>
+      <a class="btn btn-outline-primary mb-4" href="?page={{ page_obj.paginator.num_pages }}">Last</a>
+      {% endif %}
+{% endcomment %}
+{% endif%}
+
+
+{% endblock content %}

@@ -1,0 +1,12 @@
+{% extends 'blog/base.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+    <div class= "container db-blog-container py-4 border-none  col-lg-8 marginal-space">
+        <form method="POST" class="form-control border-0">
+            {% csrf_token %}
+            {{ form.media }}
+            {{ form|crispy }}
+            <button class="btn btn-dark my-4" type="submit">Create Post</button>
+        </form>
+    </div>
+{% endblock content %}

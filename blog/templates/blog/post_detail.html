@@ -1,0 +1,77 @@
+{% extends "blog/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+    <article class=" db-blog-container w-auto" style="height:fit-content;">
+      <div>
+        <div class="article-metadata py-2 ml-4">
+            <img src = "{{ object.author.profile.image.url }}" class="rounded-circle article-img">
+
+            <a class="mx-2" href="{% url 'user-posts' post.author.username %}">{{ object.author }}</a>
+            <small class="text-muted">{{ object.date_posted|date:"F d, Y" }}</small>
+        </div>
+          <div>
+              {% for cat in post.category.all %}
+                  <a href="{% url 'search-blog'%}?search={{ cat }}" class="text-decoration-none"><input type="button" value="{{ cat }}" class="category shadow-lg bg-body"></a>
+              {% endfor %}
+
+          </div>
+        </div>
+        <h3 class="text-decoration-underline my-4 ">{{ object.title }}</h3>
+        <p class="article-content">{{ object.content|safe }}</p>
+      <div class="mt-4">
+             {% if object.author == user %}
+            <a class = 'btn btn-secondary' href="{% url 'update-blog' object.id%}">Update</a>
+            <a class = 'btn btn-danger float-end'  href="{% url 'delete-blog' object.id%}">Delete</a>
+            {% endif %}
+      </div>
+    </article>
+    <h1>Comments</h1>
+    {% if user.is_authenticated%}
+      <form method="POST">
+        {% csrf_token %}
+        
+        {{ form| crispy}}
+      
+        <button class="btn btn-primary my-4" type="submit">Save</button>
+      </form>
+      <hr>
+    {% else %}
+    <div class="my-4">
+      <button class="btn btn-primary ">
+        <a href="{% url 'login'%}" class="text-light article-title">Please Login To Comment <i class="bi bi-arrow-right"></i></a>
+      </button>
+
+    </div>
+    {% endif %}
+
+    <div>
+        {% if post.comments %}
+            {% for comment in post.comments.all %}
+              <div class="db-blog-container" style="min-height: 100px;">
+                <p>
+                  <img src = "{{ comment.user.profile.image.url }}" class="rounded-circle article-img">
+                    <span class="mr-2">{{comment.user}}</span>
+                    <span class="mx-2">{{comment.date_added}}</span>
+                </p>
+                  <hr>
+                  <p>{{comment.body}}</p>
+                  <button class="btn btn-danger"><a href="{%url 'comment-delete' object.id comment.id %}" class="text-light text-decoration-none">Delete</a></button>
+
+                </div>
+                <hr>
+            {% endfor%}
+        {% else %}
+            <h4>No Comments......</h4>
+    {% endif %}
+    </div>
+    <h2>Similar posts</h2>
+{% for post in similar_posts %}
+ <p>
+ <a href="#">{{ post.title }}</a>
+ </p>
+{% empty %}
+ There are no similar posts yet.
+{% endfor %}
+
+
+{% endblock content %}
